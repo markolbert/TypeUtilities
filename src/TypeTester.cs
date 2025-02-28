@@ -1,7 +1,8 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
-// IsAssignableFrom.cs
+// TypeTester.cs
 //
 // This file is part of JumpForJoy Software's TypeUtilities.
 // 
@@ -17,14 +18,28 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
 using System;
+using System.Linq;
 
 namespace J4JSoftware.DependencyInjection;
 
-public class IsAssignableFrom<T> : ITypeTester
-    where T : class
+public class TypeTester( params Func<Type, bool>[] testers ) : ITypeTester
 {
-    public bool MeetsRequirements(Type toCheck) => typeof(T).IsAssignableFrom(toCheck);
+    public static TypeTester NonAbstract { get; } = new( x => !x.IsAbstract );
+    public static TypeTester NonGeneric { get; } = new( x => !x.IsGenericType );
+    public static TypeTester PublicConstructors { get; } = new( x => x.GetConstructors().Any() );
+
+    public bool MeetsRequirements( Type toTest )
+    {
+        foreach( var tester in testers )
+        {
+            if( !tester.Invoke( toTest ) )
+                return false;
+        }
+
+        return true;
+    }
 }

@@ -1,4 +1,5 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
 // ConstructorParameterTester.cs
@@ -17,6 +18,7 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
 using System;
@@ -26,19 +28,14 @@ using System.Reflection;
 
 namespace J4JSoftware.DependencyInjection;
 
-public class ConstructorParameterTester<T> : ITypeTester
+public class ConstructorParameterTester<T>( IEnumerable<Type> reqdParameters ) : ITypeTester
     where T : class
 {
-    private readonly List<Type> _reqdParameters;
+    private readonly List<Type> _reqdParameters = reqdParameters.ToList();
 
     public ConstructorParameterTester( params Type[] reqdParameters )
-        :this( reqdParameters.AsEnumerable())
+        : this( reqdParameters.AsEnumerable() )
     {
-    }
-
-    public ConstructorParameterTester( IEnumerable<Type> reqdParameters )
-    {
-        _reqdParameters = reqdParameters.ToList();
     }
 
     public bool MeetsRequirements( Type toCheck )
@@ -50,7 +47,7 @@ public class ConstructorParameterTester<T> : ITypeTester
                                            | BindingFlags.Public
                                            | BindingFlags.CreateInstance );
 
-        foreach ( var ctor in ctors )
+        foreach( var ctor in ctors )
         {
             var ctorParameters = ctor.GetParameters();
 

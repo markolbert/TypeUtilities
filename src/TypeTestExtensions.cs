@@ -1,4 +1,5 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
 // TypeTestExtensions.cs
@@ -17,6 +18,7 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
 using System;
@@ -31,11 +33,17 @@ public static class TypeTestExtensions
 {
     #region Add tests methods
 
-    public static TypeTests<T> AddPredefinedTests<T>( this TypeTests<T> tester, params PredefinedTypeTests[] predefined )
+    public static TypeTests<T> AddPredefinedTests<T>(
+        this TypeTests<T> tester,
+        params PredefinedTypeTests[] predefined
+    )
         where T : class =>
         tester.AddPredefinedTests( predefined.AsEnumerable() );
 
-    public static TypeTests<T> AddPredefinedTests<T>( this TypeTests<T> tester, IEnumerable<PredefinedTypeTests> predefined )
+    public static TypeTests<T> AddPredefinedTests<T>(
+        this TypeTests<T> tester,
+        IEnumerable<PredefinedTypeTests> predefined
+    )
         where T : class
     {
         foreach( var curItem in predefined )
@@ -98,7 +106,7 @@ public static class TypeTestExtensions
     )
         where T : class
     {
-        tester.Tests.Add(new FilterTypeTester<T>(filter)  );
+        tester.Tests.Add( new FilterTypeTester<T>( filter ) );
 
         return tester;
     }
@@ -106,7 +114,7 @@ public static class TypeTestExtensions
     public static TypeTests<T> AddTests<T>( this TypeTests<T> tester, params ITypeTester[] tests )
         where T : class
     {
-        tester.Tests.AddRange(tests);
+        tester.Tests.AddRange( tests );
 
         return tester;
     }

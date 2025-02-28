@@ -1,7 +1,8 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
-// ITypeTester.cs
+// ImplementsInterface.cs
 //
 // This file is part of JumpForJoy Software's TypeUtilities.
 // 
@@ -17,13 +18,16 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
 using System;
 
 namespace J4JSoftware.DependencyInjection;
 
-public interface ITypeTester
+public class ImplementsInterface<T> : ITypeTester
+    where T : class
 {
-    bool MeetsRequirements( Type toTest );
+    public bool MeetsRequirements( Type toCheck ) =>
+        typeof( T ).GetInterface( toCheck.FullName ?? string.Empty ) != null;
 }

@@ -1,7 +1,8 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
-// TypeTester.cs
+// TypeTests.cs
 //
 // This file is part of JumpForJoy Software's TypeUtilities.
 // 
@@ -17,34 +18,34 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
 using System;
-using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace J4JSoftware.DependencyInjection;
 
-public class TypeTester : ITypeTester
+public class TypeTests<T> : IEnumerable<ITypeTester>
+    where T : class
 {
-    public static TypeTester NonAbstract { get; } = new( x => !x.IsAbstract );
-    public static TypeTester NonGeneric { get; } = new( x => !x.IsGenericType );
-    public static TypeTester PublicConstructors { get; } = new( x => x.GetConstructors().Any() );
+    public Type TypeToTest { get; } = typeof( T );
 
-    private readonly Func<Type, bool>[] _testers;
+    internal List<ITypeTester> Tests { get; } = [];
 
-    public TypeTester( params Func<Type, bool>[] testers )
+    public IEnumerator<ITypeTester> GetEnumerator()
     {
-        _testers = testers;
-    }
+        // always start by checking if the type being tested is assignable from type T
+        yield return new IsAssignableFrom<T>();
 
-    public bool MeetsRequirements( Type toTest )
-    {
-        foreach( var tester in _testers )
+        yield return new HasPublicConstructors<T>();
+
+        foreach( var test in Tests )
         {
-            if( !tester.Invoke( toTest ) )
-                return false;
+            yield return test;
         }
-
-        return true;
     }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

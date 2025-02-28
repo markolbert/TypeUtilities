@@ -1,7 +1,8 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
-// TypeTests.cs
+// FilterTypeTester.cs
 //
 // This file is part of JumpForJoy Software's TypeUtilities.
 // 
@@ -17,33 +18,15 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace J4JSoftware.DependencyInjection;
 
-public class TypeTests<T> : IEnumerable<ITypeTester>
+public class FilterTypeTester<T>( Func<Type, bool> filter ) : ITypeTester
     where T : class
 {
-    public Type TypeToTest { get; } = typeof(T);
-
-    internal List<ITypeTester> Tests { get; } = new();
-
-    public IEnumerator<ITypeTester> GetEnumerator()
-    {
-        // always start by checking if the type being tested is assignable from type T
-        yield return new IsAssignableFrom<T>();
-
-        yield return new HasPublicConstructors<T>();
-
-        foreach( var test in Tests )
-        {
-            yield return test;
-        }
-    }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    public bool MeetsRequirements( Type toCheck ) => filter( toCheck );
 }

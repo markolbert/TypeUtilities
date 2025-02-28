@@ -1,7 +1,8 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
-// IsAssignableTo.cs
+// IsAssignableFrom.cs
 //
 // This file is part of JumpForJoy Software's TypeUtilities.
 // 
@@ -17,14 +18,15 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
 using System;
 
 namespace J4JSoftware.DependencyInjection;
 
-public class IsAssignableTo<T> : ITypeTester
+public class IsAssignableFrom<T> : ITypeTester
     where T : class
 {
-    public bool MeetsRequirements( Type toCheck ) => toCheck.IsAssignableTo( typeof( T ) );
+    public bool MeetsRequirements( Type toCheck ) => typeof( T ).IsAssignableFrom( toCheck );
 }

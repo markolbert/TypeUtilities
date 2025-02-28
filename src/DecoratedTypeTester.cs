@@ -1,7 +1,8 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
-// Permute.cs
+// DecoratedTypeTester.cs
 //
 // This file is part of JumpForJoy Software's TypeUtilities.
 // 
@@ -17,38 +18,28 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
-using System.Collections.Generic;
+using System;
+using System.Linq;
 
 namespace J4JSoftware.DependencyInjection;
 
-// thanx to https://gist.github.com/fdeitelhoff/5052484 for this!
-public static class PermuteExtensions
+public class DecoratedTypeTester<T>( bool allowInherited, Type requiredAttribute ) : ITypeTester
+    where T : class
 {
-    public static IEnumerable<IEnumerable<T>> Permute<T>( this IList<T> values )
+    private readonly Type? _requiredAttribute =
+        typeof( Attribute ).IsAssignableFrom( requiredAttribute ) ? requiredAttribute : null;
+
+    public bool MeetsRequirements( Type toCheck )
     {
-        ICollection<IList<T>> result = new List<IList<T>>();
+        if( _requiredAttribute == null )
+            return false;
 
-        Permute( values, values.Count, result );
+        var typeAttributes = toCheck.GetCustomAttributes( allowInherited );
 
-        return result;
+        // ReSharper disable once UseMethodIsInstanceOfType
+        return typeAttributes.Any( x => _requiredAttribute.IsAssignableFrom( x.GetType() ) );
     }
-
-    private static void Permute<T>( IList<T> values, int n, ICollection<IList<T>> result )
-    {
-        if( n == 1 )
-            result.Add( new List<T>( values ) );
-        else
-        {
-            for( var i = 0; i < n; i++ )
-            {
-                Permute( values, n - 1, result );
-                Swap( values, n % 2 == 1 ? 0 : i, n - 1 );
-            }
-        }
-    }
-
-    private static void Swap<T>( IList<T> values, int i, int j ) =>
-        ( values[ i ], values[ j ] ) = ( values[ j ], values[ i ] );
 }

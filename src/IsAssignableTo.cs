@@ -1,7 +1,8 @@
 ﻿#region copyright
+
 // Copyright (c) 2021, 2022, 2023 Mark A. Olbert 
 // https://www.JumpForJoySoftware.com
-// HasPublicConstructors.cs
+// IsAssignableTo.cs
 //
 // This file is part of JumpForJoy Software's TypeUtilities.
 // 
@@ -17,15 +18,15 @@
 // 
 // You should have received a copy of the GNU General Public License along 
 // with TypeUtilities. If not, see <https://www.gnu.org/licenses/>.
+
 #endregion
 
 using System;
-using System.Linq;
 
 namespace J4JSoftware.DependencyInjection;
 
-public class HasPublicConstructors<T> : ITypeTester
+public class IsAssignableTo<T> : ITypeTester
     where T : class
 {
-    public bool MeetsRequirements(Type toCheck) => toCheck.GetConstructors().Any();
+    public bool MeetsRequirements( Type toCheck ) => toCheck.IsAssignableTo( typeof( T ) );
 }
