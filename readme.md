@@ -2,13 +2,15 @@
 
 Provides mechanisms for filtering types during dependency injection registration. While developed to work with [Autofac](https://www.autofac.org) the filtering routines should work with other DI frameworks as well.
 
-The library repository is available on [github](https://github.com/markolbert/ProgrammingUtilities/blob/master/TypeUtilities/docs/readme.md).
+The library repository is available on [github](https://github.com/markolbert/TypeUtilities).
 
-That same link also provides documentation of how these utilities are used by my Autofac-based DI/`IHost` library.
+It has nullability enabled, and requires Net9.
+
+The change log is available [here](docs/changes.md).
 
 ## Overview
 
-I love [Autofac](https://www.autofac.org), a powerful dependency injection library for C#. I use it in almost all of my projects. It makes egistering concrete types as either specific interface implementations or as themselves a snap.
+I love [Autofac](https://www.autofac.org), a powerful dependency injection library for C#. I use it in almost all of my projects. It makes registering concrete types as either specific interface implementations or as themselves a snap.
 
 There are a few ways its use can be simplified, though, in some use cases. That's what this library aims to do: make it relatively straightforward to specify various kinds of type filter conditions, so you can register all the classes that match the conditions at once.
 
